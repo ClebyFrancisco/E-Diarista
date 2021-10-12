@@ -1,6 +1,6 @@
-import { styled, Avatar, Rating } from "@mui/material";
+import { styled, Avatar, Rating, Container } from "@mui/material";
 
-export const UserInformationContainer = styled("div")`
+export const UserInformationContainer = styled(Container)`
   display: grid;
   grid-template-columns: 60px 1fr;
   grid-template-rows: repeat(3, auto);
@@ -13,6 +13,7 @@ export const UserInformationContainer = styled("div")`
   gap: ${({ theme }) => theme.spacing(.5) + ' ' + theme.spacing(2)};
   align-items: center;
 `;
+
 
 export const UserName = styled("div")`
   grid-area: name;
