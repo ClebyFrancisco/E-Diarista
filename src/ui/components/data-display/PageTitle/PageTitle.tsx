@@ -1,10 +1,11 @@
+import { jsx } from "@emotion/react";
 import React from "react";
 import { PageSubTitleStyled, PageTitleContainer, PageTitleStyled } from "./PageTitle.style";
 
 
 interface PageTitleProps{
     title: string;
-    subtitle:string;
+    subtitle?:string | JSX.Element;
 }
 const PageTitle: React.FC<PageTitleProps> = (props) =>{
     return(
