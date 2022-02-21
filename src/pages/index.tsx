@@ -1,4 +1,4 @@
-import { Button, Container, Typography } from "@mui/material";
+import { Button, CircularProgress, Container, Typography } from "@mui/material";
 import {
   FormsElementsContainer,
   ProfissionaisPaper,
@@ -14,12 +14,22 @@ import TextField from "ui/components/inputs/TextField/TextField";
 import TextFieldMask from "ui/components/inputs/TextFieldMask/TextFieldMask";
 
 const Home: NextPage = () => {
-  const { cep, setCep, cepValido } = useIndex()
+  const {
+    cep,
+    setCep,
+    cepValido,
+    buscarProfissionais,
+    erro,
+    diaristas,
+    buscaFeita,
+    carregando,
+    diaristasRestantes,
+  } = useIndex();
   return (
     <div>
       <SafeEnvironment />
       <PageTitle
-        title={"Conheça Os profissionais"}
+        title={"Conheça os profissionais"}
         subtitle={
           "Preencha seu endereço e veja todos os profissionais da sua localidade"
         }
@@ -33,56 +43,56 @@ const Home: NextPage = () => {
             variant={"outlined"}
             value={cep}
             onChange={(event) => setCep(event.target.value)}
-          />{cepValido}
-          <Typography color={"error"}>CEP inválido!</Typography>
+          />
+          {erro &&  <Typography color={"error"}>{erro}</Typography>}
           <Button
             variant={"contained"}
             color={"secondary"}
             sx={{ width: "220px" }}
+            disabled={!cepValido || carregando}
+            onClick={() => buscarProfissionais(cep)}
           >
-            Buscar
+            {carregando ? <CircularProgress size={20} /> : " Buscar"}
           </Button>
         </FormsElementsContainer>
-        <ProfissionaisPaper>
-          <ProfissionaisContainer>
-            <UserInformation
-              picture={"https://github.com/ClebyFrancisco.png"}
-              name={"Cleby Francisco"}
-              rating={4}
-              description={"Pernambuco"}
-            />
-            <UserInformation
-              picture={"https://github.com/ClebyFrancisco.png"}
-              name={"Cleby Francisco"}
-              rating={4}
-              description={"Pernambuco"}
-            />
-            <UserInformation
-              picture={"https://github.com/ClebyFrancisco.png"}
-              name={"Cleby Francisco"}
-              rating={4}
-              description={"Pernambuco"}
-            />
-            <UserInformation
-              picture={"https://github.com/ClebyFrancisco.png"}
-              name={"Cleby Francisco"}
-              rating={4}
-              description={"Pernambuco"}
-            />
-            <UserInformation
-              picture={"https://github.com/ClebyFrancisco.png"}
-              name={"Cleby Francisco"}
-              rating={4}
-              description={"Pernambuco"}
-            />
-            <UserInformation
-              picture={"https://github.com/ClebyFrancisco.png"}
-              name={"Cleby Francisco"}
-              rating={4}
-              description={"Pernambuco"}
-            />
-          </ProfissionaisContainer>
-        </ProfissionaisPaper>
+        {buscaFeita &&
+          (diaristas.length > 0 ? (
+            <ProfissionaisPaper>
+              <ProfissionaisContainer>
+                {diaristas.map((item, index) => {
+                  return (
+                    <UserInformation
+                    key={index}
+                      picture={item.foto_usuario}
+                      name={item.nome_completo}
+                      rating={item.reputacao}
+                      description={item.cidade}
+                    />
+                  );
+                })}
+                
+              
+              </ProfissionaisContainer>
+              <Container sx={{ textAlign: "center" }}>
+                {diaristasRestantes > 0 && (
+                  <Typography sx={{ mt: 5 }}>
+                    ... e mais {diaristasRestantes}{' '}{diaristasRestantes > 1
+                    ? "profissionais atendem "
+                    : "profissional atende"}
+                     ao seu endereço.
+                  </Typography>
+                )}
+
+                <Button variant="contained" color="secondary" sx={{ mt: 5 }}>
+                  Contratar um profissional
+                </Button>
+              </Container>
+            </ProfissionaisPaper>
+          ) : (
+            <Typography align="center" color="textPrimary">
+              Ainda Não temos nenhuma diarista na sua região
+            </Typography>
+          ))}
       </Container>
     </div>
   );
